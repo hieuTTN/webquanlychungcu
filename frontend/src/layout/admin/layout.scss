@@ -49,7 +49,6 @@
     padding-left: 2rem;
 }
 .fa-bell {
-    font-size: 1.5rem;
     cursor: pointer;
 }
 
@@ -517,4 +516,12 @@
 }
 .ipngay{
     padding: 5rem 0.5rem;
+}
+.error{
+    color: red;
+    font-weight: bold;
+}
+.success{
+    color: green;
+    font-weight: bold;
 }

@@ -24,13 +24,9 @@ public class Maintenance {
 
     private String content;
 
-    private LocalDate maintenanceDate;
+    private LocalDateTime maintenanceDate;
 
-    private String maintenanceTime;
-
-    private LocalDate expectedCompletionDate;
-
-    private String expectedCompletionTime;
+    private LocalDateTime expectedCompletionDate;
 
     private Boolean completed = false;
 

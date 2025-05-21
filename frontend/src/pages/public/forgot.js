@@ -32,7 +32,7 @@ function forgotPage(){
                     <form onSubmit={forgorPassword} autocomplete="off">
                         <label class="lbform">Nhập email của bạn</label>
                         <input required id='email' class="inputlogin"/>
-                        <button class="btndangnhap">XÁC NHẬN</button>
+                        <button class="btndangnhap btnleft">XÁC NHẬN</button>
                         <button type="button"  onClick={()=>{window.location.href = 'login'}} class="btndangky">ĐĂNG NHẬP</button>
                     </form><br/><br/><br/>
                 </div>

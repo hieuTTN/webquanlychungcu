@@ -18,9 +18,6 @@ public interface ApartmentRepository extends JpaRepository<Apartment, Long> {
     @Query("select a from Apartment a where a.name = ?1")
     Apartment findByTen(String ten);
 
-    @Query("select a from Apartment a where a.residents. = ?1")
-    Apartment findByUser(Long userId);
-
     @Query("select a from Apartment a where a.name = ?1 and a.id <> ?2")
     Apartment findByTenAndId(String ten, Long id);
 

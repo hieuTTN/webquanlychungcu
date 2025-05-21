@@ -30,34 +30,6 @@ function Header({ children }){
     useEffect(()=>{
         checkAdmin();
         import('../admin/layout.scss').then(() => setCssLoaded(true));
-        getCountNoti();
-
-        var userlc = localStorage.getItem("user")
-        var email = JSON.parse(userlc).email
-        var uls = urlGlobal();
-        const sock = new SockJS(uls+'/notification-admin');
-        const stompClient = new Client({
-        webSocketFactory: () => sock,
-        onConnect: () => {
-            console.log("WebSocket connected successfully!");
-            stompClient.subscribe('/users/queue/notification', (msg) => {
-                var title = msg.headers.title
-                var content = msg.headers.content
-                var link = msg.headers.link
-                toast.info(content);
-                getCountNoti();
-            });
-        },
-        connectHeaders: {
-            username: email 
-        }
-        });
-        stompClient.activate();
-        setClient(stompClient);
-
-        return () => {
-            stompClient.deactivate();
-        };
     }, []);
     if (!isCssLoaded) {
         return <></>
@@ -101,14 +73,9 @@ function Header({ children }){
         <div class="d-flex" id="wrapper">
         <nav id="sidebar" class="bg-dark">
             <div class="sidebar-header p-3 text-white">
-                <h5>Quản Lý Phòng Khám <i class="fa fa-bars pointer" id="iconbaradmin" onClick={openClose}></i></h5> 
+                <h5>Quản Lý Chung Cư <i class="fa fa-bars pointer" id="iconbaradmin" onClick={openClose}></i></h5> 
             </div>
             <ul class="list-unstyled components">
-                <li className={isActive("/admin/index")}>
-                    <a href="/" class="text-white text-decoration-none">
-                        <i class="fa fa-home fa-fw"></i> Trang chủ
-                    </a>
-                </li>
                 <li className={isActive(["/admin/user"])}>
                     <a href="#coltaikhoan" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white text-decoration-none">
                         <i class="fa fa-user fa-fw"></i> Tài khoản
@@ -124,71 +91,55 @@ function Header({ children }){
                 </li>
                 <li className={isActive(["/admin/blog", "/admin/add-blog"])}>
                     <a href="#colbaiviet" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white text-decoration-none">
-                        <i class="fa fa-newspaper fa-fw"></i> Bài viết
+                        <i class="fa fa-bell fa-fw"></i> Thông báo
                     </a>
                     <ul class="collapse list-unstyleds" id="colbaiviet">
                         <li class="nav-item">
-                            <a href="blog" class="text-white text-decoration-none ps-4"><i class="fa fa-list"></i> Danh sách tin đăng</a>
+                            <a href="blog" class="text-white text-decoration-none ps-4"><i class="fa fa-list"></i> Danh sách thông báo</a>
                         </li>
                         <li class="nav-item">
-                            <a href="add-blog" class="text-white text-decoration-none ps-4"><i class="fa fa-plus"></i> Thêm bài viết</a>
+                            <a href="add-blog" class="text-white text-decoration-none ps-4"><i class="fa fa-plus"></i> Thêm thông báo</a>
                         </li>
                     </ul>
                 </li>
                 <li className={isActive(["/admin/category"])}>
                     <a href="category" class="text-white text-decoration-none">
-                        <i class="fa fa-list fa-fw"></i> Danh mục
+                        <i class="fa fa-list fa-fw"></i> Quản lý phản ánh
                     </a>
                 </li>
                 <li className={isActive(["/admin/center", "/admin/add-center"])}>
                     <a href="#dashboardSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white text-decoration-none">
-                        <i class="fa fa-hospital fa-fw"></i> Cơ sở khám
+                        <i class="fa fa-users fa-fw"></i> Quản lý cư dân
                     </a>
                     <ul class="collapse list-unstyleds" id="dashboardSubmenu">
                         <li class="nav-item">
-                            <a href="center" class="text-white text-decoration-none ps-4"><i class="fa fa-list"></i> Danh sách cơ sở khám</a>
+                            <a href="center" class="text-white text-decoration-none ps-4"><i class="fa fa-list"></i> Danh sách cư dân</a>
                         </li>
                         <li class="nav-item">
-                            <a href="add-center" class="text-white text-decoration-none ps-4"><i class="fa fa-plus"></i> Thêm cơ sở khám</a>
+                            <a href="add-center" class="text-white text-decoration-none ps-4"><i class="fa fa-plus"></i> Thêm cư dân</a>
                         </li>
                     </ul>
                 </li>
-                <li className={isActive(["/admin/specialty", "/admin/add-specialty"])}>
+                <li className={isActive(["/admin/canho", "/admin/add-canho"])}>
                     <a href="#specialty" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white text-decoration-none">
-                        <i class="fa fa-syringe fa-fw"></i> Chuyên khoa
+                        <i class="fa fa-home fa-fw"></i> Quản lý căn hộ
                     </a>
                     <ul class="collapse list-unstyleds" id="specialty">
                         <li class="nav-item">
-                            <a href="specialty" class="text-white text-decoration-none ps-4"><i class="fa fa-list"></i> Danh sách chuyên khoa</a>
+                            <a href="canho" class="text-white text-decoration-none ps-4"><i class="fa fa-list"></i> Danh sách căn hộ</a>
                         </li>
                         <li class="nav-item">
-                            <a href="add-specialty" class="text-white text-decoration-none ps-4"><i class="fa fa-plus"></i> Thêm chuyên khoa</a>
+                            <a href="add-canho" class="text-white text-decoration-none ps-4"><i class="fa fa-plus"></i> Thêm căn hộ</a>
                         </li>
                     </ul>
                 </li>
                 <li className={isActive(["/admin/service", "/admin/add-service"])}>
                     <a href="#dichvukham" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white text-decoration-none">
-                        <i class="fa fa-heartbeat fa-fw"></i> Dịch vụ khám
+                        <i class="fa fa-money fa-fw"></i> Quản lý đóng phí
                     </a>
                     <ul class="collapse list-unstyleds" id="dichvukham">
                         <li class="nav-item">
-                            <a href="service" class="text-white text-decoration-none ps-4"><i class="fa fa-list"></i> Danh sách dịch vụ khám</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="add-service" class="text-white text-decoration-none ps-4"><i class="fa fa-plus"></i> Thêm dịch vụ khám</a>
-                        </li>
-                    </ul>
-                </li>
-                <li className={isActive(["/admin/doctor", "/admin/add-doctor", "/admin/adddoctordate","/admin/doctordate"])}>
-                    <a href="#bacsy" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white text-decoration-none">
-                        <i class="fa-solid fa-user-doctor fa-fw"></i> Bác sỹ
-                    </a>
-                    <ul class="collapse list-unstyleds" id="bacsy">
-                        <li class="nav-item">
-                            <a href="doctor" class="text-white text-decoration-none ps-4"><i class="fa fa-list"></i> Danh sách bác sỹ</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="add-doctor" class="text-white text-decoration-none ps-4"><i class="fa fa-plus"></i> Thêm bác sỹ</a>
+                            <a href="service" class="text-white text-decoration-none ps-4"><i class="fa fa-list"></i> Danh sách đóng phí</a>
                         </li>
                     </ul>
                 </li>
@@ -198,10 +149,7 @@ function Header({ children }){
                     </a>
                     <ul class="collapse list-unstyleds" id="dashboardSubmenu1">
                         <li class="nav-item">
-                            <a href="history-pay" class="text-white text-decoration-none ps-4"><i class="fa fa-clock"></i> Lịch sử nạp tiền</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="deduction-history" class="text-white text-decoration-none ps-4"><i class="fa fa-clock"></i> Lịch sử trừ tiền</a>
+                            <a href="history-pay" class="text-white text-decoration-none ps-4"><i class="fa fa-clock"></i> Lịch sử thanh toán</a>
                         </li>
                         <li class="nav-item">
                             <a href="thong-ke" class="text-white text-decoration-none ps-4"><i class="fa fa-chart-line"></i> Thống kê</a>

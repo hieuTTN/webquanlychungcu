@@ -3,6 +3,10 @@ import layoutLogin from "../layout/user/loginlayout/login";
 
 //admin
 import userAdmin from '../pages/admin/user'
+import AdminBlog from '../pages/admin/blog'
+import AdminAddBlog from '../pages/admin/addblog'
+import AdminCanHo from '../pages/admin/canho'
+import AdminAddCanHo from '../pages/admin/addcanho'
 
 //public
 import login from "../pages/public/login";
@@ -27,6 +31,10 @@ const userRoutes = [
 
 const adminRoutes = [
     { path: "/admin/user", component: userAdmin, layout: layoutAdmin },
+    { path: "/admin/blog", component: AdminBlog, layout: layoutAdmin },
+    { path: "/admin/add-blog", component: AdminAddBlog, layout: layoutAdmin },
+    { path: "/admin/canho", component: AdminCanHo, layout: layoutAdmin },
+    { path: "/admin/add-canho", component: AdminAddCanHo, layout: layoutAdmin },
 ];
 
 

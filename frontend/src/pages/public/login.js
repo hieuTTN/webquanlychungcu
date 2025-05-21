@@ -45,35 +45,10 @@ async function processLogin(user, token) {
     if (user.authorities.name === "ROLE_USER") {
         window.location.href = '/index';
     }
-    if (user.authorities.name === "ROLE_DOCTOR") {
-        
-    }
 }
 
 
 function login(){
-    const handleLoginSuccess = async (accessToken) => {
-        console.log(accessToken);
-        
-        var response = await fetch('http://localhost:8080/api/user/login/google', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'text/plain'
-            },
-            body: accessToken.credential
-        })
-        var result = await response.json();
-        if (response.status < 300) {
-            processLogin(result.user, result.token)
-        }
-        if (response.status == 417) {
-            toast.warning(result.defaultMessage);
-        }
-    };
-    
-    const handleLoginError = () => {
-        toast.error("Đăng nhập google thất bại")
-    };
 
     return(
         <div class="contentweb">
