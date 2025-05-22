@@ -1,5 +1,3 @@
-import Footer from '../../layout/customer/footer/footer'
-import logomini from '../../assest/images/logomini.svg'
 import { useState, useEffect } from 'react'
 import { Parser } from "html-to-react";
 import ReactPaginate from 'react-paginate';
@@ -44,18 +42,18 @@ function DoiMatKhau(){
     return(
         <>
             <div class="headeraccount">
-                <span class="fontyel"></span><span class="smyl"> Để bảo mật tài khoản, vui lòng không chia sẻ mật khẩu cho người khác</span>
+                <h4 class="smyl"> Để bảo mật tài khoản, vui lòng không chia sẻ mật khẩu cho người khác</h4>
             </div>
             <div class="col-lg-9 col-md-8 col-sm-12 col-12 passacc">
                 <form onSubmit={handleChangePass} autocomplete="off">
-                    <label class="lbacc">Mật khẩu hiện tại *</label>
+                    <label class="lb-form">Mật khẩu hiện tại *</label>
                     <input name="oldpass" type="password" class="form-control" required/>
-                    <label class="lbacc">Mật khẩu mới *</label>
+                    <label class="lb-form">Mật khẩu mới *</label>
                     <input name="newpass" type="password" class="form-control" required/>
-                    <label class="lbacc">Xác nhận mật khẩu mới *</label>
+                    <label class="lb-form">Xác nhận mật khẩu mới *</label>
                     <input name="renewpass" type="password" class="form-control" required/>
                     <br/>
-                    <button type="submit" class="btndoimk">LƯU</button>
+                    <button type="submit" class="btndoimk" className='btn btn-primary form-control'>LƯU</button>
                 </form>
             </div>
         </>

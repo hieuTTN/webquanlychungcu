@@ -45,7 +45,7 @@ public class UserApi {
         return tokenDto;
     }
 
-    @PostMapping("/user/change-password")
+    @PostMapping("/all/change-password")
     public ResponseEntity<?> changePassword(@RequestBody PasswordDto passwordDto){
         userService.changePass(passwordDto.getOldPass(), passwordDto.getNewPass());
         return new ResponseEntity<>("Success", HttpStatus.OK);
@@ -116,5 +116,6 @@ public class UserApi {
     public ResponseEntity<?> inforLogged()  {
         return new ResponseEntity<>(userUtils.getUserWithAuthority(),HttpStatus.OK);
     }
+
 
 }

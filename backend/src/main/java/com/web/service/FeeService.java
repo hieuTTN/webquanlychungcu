@@ -1,10 +1,15 @@
 package com.web.service;
 
 import com.web.dto.request.FeeUpdate;
+import com.web.dto.request.PayCheckRequest;
 import com.web.dto.response.Fee;
+import com.web.dto.response.RemainFee;
 import com.web.entity.*;
+import com.web.exception.MessageException;
 import com.web.repository.*;
 import com.web.utils.MailService;
+import com.web.utils.UserUtils;
+import com.web.vnpay.VNPayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +39,16 @@ public class FeeService {
     private UtilityBillRepository utilityBillRepository;
 
     @Autowired
+    private UserUtils userUtils;
+
+    @Autowired
+    private ResidentRepository residentRepository;
+
+    @Autowired
     private MailService mailService;
+
+    @Autowired
+    private VNPayService vnPayService;
 
     public List<Fee> getFeeByTime(Integer month, Integer year){
         List<Fee> list = new ArrayList<>();
@@ -141,19 +155,19 @@ public class FeeService {
     public void sendMailFee(Apartment a, Double fee, Integer month, Integer year, Integer loaiPhi){
         if(loaiPhi == 1){
             for (Resident r : a.getResidents()){
-                mailService.sendEmail(r.getEmail(), "Thông báo đóng phí căn hộ "+a.getName(),
+                mailService.sendEmail(r.getUser().getUsername(), "Thông báo đóng phí căn hộ "+a.getName(),
                         "Phí căn hộ tháng "+month+" năm "+year+" của bạn là "+ formatToVND(fee), false, true);
             }
         }
         if(loaiPhi == 2){
             for (Resident r : a.getResidents()){
-                mailService.sendEmail(r.getEmail(), "Thông báo đóng phí gửi xe ",
+                mailService.sendEmail(r.getUser().getUsername(), "Thông báo đóng phí gửi xe ",
                         "Phí gửi xe của căn hộ "+ a.getName()+" tháng "+month+" năm "+year+" của bạn là "+ formatToVND(fee), false, true);
             }
         }
         if(loaiPhi == 3){
             for (Resident r : a.getResidents()){
-                mailService.sendEmail(r.getEmail(), "Thông báo đóng phí điện nước ",
+                mailService.sendEmail(r.getUser().getUsername(), "Thông báo đóng phí điện nước ",
                         "Phí điện nước của căn hộ "+ a.getName()+" tháng "+month+" năm "+year+" của bạn là "+ formatToVND(fee), false, true);
             }
         }
@@ -201,7 +215,10 @@ public class FeeService {
                 utilityBillEx.setNumWater(feeUpdate.getSoNuoc());
             }catch (Exception e) {}
         }
+
         saveHDDienNuoc(utilityBillEx);
+        utilityBillEx.setPaidStatus(feeUpdate.getCheckPhiDienNuoc());
+        utilityBillRepository.save(utilityBillEx);
     }
 
     public void saveHDDienNuoc(UtilityBill utilityBill){
@@ -300,4 +317,132 @@ public class FeeService {
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(vietnamLocale);
         return currencyFormatter.format(amount);
     }
+
+    public RemainFee allRemainFee(){
+        User user = userUtils.getUserWithAuthority();
+        Resident resident = residentRepository.findByUserName(user.getUsername());
+        List<VehicleFee> vehicleFees = vehicleFeeRepository.dichVuChuaDong(resident.getApartment().getId());
+        List<ServiceFee> serviceFees = serviceFeeRepository.dichVuChuaDong(resident.getApartment().getId());
+        List<UtilityBill> utilityBills = utilityBillRepository.dichVuChuaDong(resident.getApartment().getId());
+
+        Double fee = 0D;
+        for(VehicleFee v : vehicleFees){
+            fee += v.getFee();
+        }
+        for(ServiceFee v : serviceFees){
+            fee += v.getFee();
+        }
+        for(UtilityBill v : utilityBills){
+            fee += v.getFee();
+        }
+
+        return new RemainFee(resident, fee, vehicleFees, serviceFees, utilityBills);
+    }
+
+    public RemainFee phiDaDong(){
+        User user = userUtils.getUserWithAuthority();
+        Resident resident = residentRepository.findByUserName(user.getUsername());
+        List<VehicleFee> vehicleFees = vehicleFeeRepository.dichVuDaDong(resident.getApartment().getId());
+        List<ServiceFee> serviceFees = serviceFeeRepository.dichVuDaDong(resident.getApartment().getId());
+        List<UtilityBill> utilityBills = utilityBillRepository.dichVuDaDong(resident.getApartment().getId());
+
+        Double fee = 0D;
+        for(VehicleFee v : vehicleFees){
+            fee += v.getFee();
+        }
+        for(ServiceFee v : serviceFees){
+            fee += v.getFee();
+        }
+        for(UtilityBill v : utilityBills){
+            fee += v.getFee();
+        }
+
+        return new RemainFee(resident, fee, vehicleFees, serviceFees, utilityBills);
+    }
+
+    public String payService(Long id,String returnUrl, String type){
+        if(type.equals("SERVICE")){
+            ServiceFee serviceFee = serviceFeeRepository.findById(id).get();
+            return vnPayService.createOrder(serviceFee.getFee().intValue(), String.valueOf(System.currentTimeMillis()),returnUrl);
+        }
+        if(type.equals("GUIXE")){
+            VehicleFee vehicleFee = vehicleFeeRepository.findById(id).get();
+            return vnPayService.createOrder(vehicleFee.getFee().intValue(), String.valueOf(System.currentTimeMillis()),returnUrl);
+        }
+        if(type.equals("DIENNUOC")){
+            UtilityBill utilityBill = utilityBillRepository.findById(id).get();
+            return vnPayService.createOrder(utilityBill.getFee().intValue(), String.valueOf(System.currentTimeMillis()),returnUrl);
+        }
+
+        return "";
+    }
+
+    public void checPayService(PayCheckRequest request) {
+        int paymentStatus = vnPayService.orderReturnByUrl(request.getUrlVnpay());
+        if(paymentStatus != 1){
+            throw new MessageException("Thanh toán thất bại");
+        }
+        if(request.getType().equals("SERVICE")){
+            ServiceFee serviceFee = serviceFeeRepository.findById(request.getId()).get();
+            serviceFee.setPaidStatus(true);
+            serviceFeeRepository.save(serviceFee);
+        }
+        if(request.getType().equals("GUIXE")){
+            VehicleFee vehicleFee = vehicleFeeRepository.findById(request.getId()).get();
+            vehicleFee.setPaidStatus(true);
+            vehicleFeeRepository.save(vehicleFee);
+        }
+        if(request.getType().equals("DIENNUOC")){
+            UtilityBill utilityBill = utilityBillRepository.findById(request.getId()).get();
+            utilityBill.setPaidStatus(true);
+            utilityBillRepository.save(utilityBill);
+        }
+    }
+
+    public String payAll(String returnUrl) {
+        User user = userUtils.getUserWithAuthority();
+        Resident resident = residentRepository.findByUserName(user.getUsername());
+        List<VehicleFee> vehicleFees = vehicleFeeRepository.dichVuChuaDong(resident.getApartment().getId());
+        List<ServiceFee> serviceFees = serviceFeeRepository.dichVuChuaDong(resident.getApartment().getId());
+        List<UtilityBill> utilityBills = utilityBillRepository.dichVuChuaDong(resident.getApartment().getId());
+
+        Double fee = 0D;
+        for(VehicleFee v : vehicleFees){
+            fee += v.getFee();
+        }
+        for(ServiceFee v : serviceFees){
+            fee += v.getFee();
+        }
+        for(UtilityBill v : utilityBills){
+            fee += v.getFee();
+        }
+        return vnPayService.createOrder(fee.intValue(), String.valueOf(System.currentTimeMillis()),returnUrl);
+    }
+
+    public void checkPayAll(PayCheckRequest request) {
+        int paymentStatus = vnPayService.orderReturnByUrl(request.getUrlVnpay());
+        if(paymentStatus != 1){
+            throw new MessageException("Thanh toán thất bại");
+        }
+        User user = userUtils.getUserWithAuthority();
+        Resident resident = residentRepository.findByUserName(user.getUsername());
+        List<VehicleFee> vehicleFees = vehicleFeeRepository.dichVuChuaDong(resident.getApartment().getId());
+        List<ServiceFee> serviceFees = serviceFeeRepository.dichVuChuaDong(resident.getApartment().getId());
+        List<UtilityBill> utilityBills = utilityBillRepository.dichVuChuaDong(resident.getApartment().getId());
+
+        for(VehicleFee v : vehicleFees){
+            v.setPaidStatus(true);
+            vehicleFeeRepository.save(v);
+        }
+        for(ServiceFee v : serviceFees){
+            v.setPaidStatus(true);
+            serviceFeeRepository.save(v);
+        }
+        for(UtilityBill v : utilityBills){
+            v.setPaidStatus(true);
+            utilityBillRepository.save(v);
+        }
+    }
+
+
 }

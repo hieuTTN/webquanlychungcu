@@ -84,6 +84,11 @@ function Header({ children }){
                         <i class="fa fa-file fa-fw"></i> Gửi phản hồi
                     </a>
                 </li>
+                <li className={isActive(["/user/doimatkhau"])}>
+                     <a href="/user/doimatkhau" class="text-white text-decoration-none">
+                        <i class="fa fa-key fa-fw"></i> Đổi mật khẩu
+                    </a>
+                </li>
                 <li>
                     <a href="#" onClick={logout} class="text-white text-decoration-none">
                         <i class="fa fa-sign-out fa-fw"></i> Đăng xuất

@@ -25,6 +25,11 @@ import ThongTinChung from "../pages/user/thongtinchung";
 import DangKyPhuongTien from "../pages/user/dangkyphuongtien";
 import UserBlog from "../pages/user/blog";
 import UserReport from "../pages/user/report";
+import UserDongPhi from "../pages/user/dongphi";
+import CheckDon from "../pages/user/checkdon";
+import CheckPayAll from "../pages/user/checkpayall";
+import UserPhiDaDong from "../pages/user/phidadong";
+import DoiMatKhau from "../pages/user/doimatkhau";
 
 
 const publicRoutes = [
@@ -39,6 +44,11 @@ const userRoutes = [
     {path: "/user/dangkyphuongtien", component: DangKyPhuongTien},
     {path: "/user/blog", component: UserBlog},
     {path: "/user/report", component: UserReport},
+    {path: "/user/dongphi", component: UserDongPhi},
+    {path: "/user/checkdon", component: CheckDon},
+    {path: "/user/checkpayall", component: CheckPayAll},
+    {path: "/user/phidadong", component: UserPhiDaDong},
+    {path: "/user/doimatkhau", component: DoiMatKhau},
 ];
 
 

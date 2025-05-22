@@ -10,31 +10,35 @@ import React, { useRef } from 'react';
 
 async function saveData(event) {
     event.preventDefault();
-    document.getElementById("loading").style.display = 'block'
     var uls = new URL(document.URL)
     var id = uls.searchParams.get("id");
+    var month = uls.searchParams.get("month");
+    var year = uls.searchParams.get("year");
     var payload = {
         "id": id,
-        "name": event.target.elements.name.value,
-        "acreage": event.target.elements.acreage.value,
-        "floor": event.target.elements.floor.value,
-        "price": event.target.elements.price.value,
-        "isSold": event.target.elements.isSold.checked,
+        "month": month,
+        "year": year,
+        "checkPhiGuiXe": document.getElementById("thanhtoanguixe").checked,
+        "checkPhiCanHo": document.getElementById("thanhtoancanho").checked,
+        "checkPhiDienNuoc": document.getElementById("thanhtoandien").checked,
+        "chiSoDien": document.getElementById("chisodien").value,
+        "chiSoNuoc": document.getElementById("chisonuoc").value,
+        "soDien": document.getElementById("sodien").value,
+        "soNuoc": document.getElementById("sonuoc").value,
     }
-    const response = await postMethodPayload('/api/apartment/admin/create', payload)
+    const response = await postMethodPayload('/api/fee/admin/update', payload)
     var result = await response.json();
     console.log(result)
     if (response.status < 300) {
         Swal.fire({
             title: "Thông báo",
-            text: "Thêm/cập nhật thành công!",
+            text: "Cập nhật thành công!",
             preConfirm: () => {
-                window.location.href = 'canho'
+                window.location.href = 'dongphi'
             }
         });
     } else {
-        toast.error("Thêm/ sửa thất bại");
-        document.getElementById("loading").style.display = 'none'
+        toast.error("Sửa thất bại");
     }
 }
 
