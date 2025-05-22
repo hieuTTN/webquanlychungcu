@@ -30,6 +30,8 @@ public class Report {
 
     private String reason;
 
+    private Boolean checked = false;
+
     @ManyToOne
     private User user;
 }

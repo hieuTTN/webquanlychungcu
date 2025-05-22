@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.awt.event.ActionEvent;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -378,6 +379,8 @@ public class FeeService {
     }
 
     public void checPayService(PayCheckRequest request) {
+        User user = userUtils.getUserWithAuthority();
+        Resident resident = residentRepository.findByUserName(user.getUsername());
         int paymentStatus = vnPayService.orderReturnByUrl(request.getUrlVnpay());
         if(paymentStatus != 1){
             throw new MessageException("Thanh toán thất bại");
@@ -386,16 +389,19 @@ public class FeeService {
             ServiceFee serviceFee = serviceFeeRepository.findById(request.getId()).get();
             serviceFee.setPaidStatus(true);
             serviceFeeRepository.save(serviceFee);
+            sendMail(resident.getApartment(), "Phí dịch vụ", serviceFee.getFee(),resident.getFullName(),request.getVnpOrderInfo());
         }
         if(request.getType().equals("GUIXE")){
             VehicleFee vehicleFee = vehicleFeeRepository.findById(request.getId()).get();
             vehicleFee.setPaidStatus(true);
             vehicleFeeRepository.save(vehicleFee);
+            sendMail(resident.getApartment(), "Phí gửi xe", vehicleFee.getFee(),resident.getFullName(),request.getVnpOrderInfo());
         }
         if(request.getType().equals("DIENNUOC")){
             UtilityBill utilityBill = utilityBillRepository.findById(request.getId()).get();
             utilityBill.setPaidStatus(true);
             utilityBillRepository.save(utilityBill);
+            sendMail(resident.getApartment(), "Phí điện nước", utilityBill.getFee(),resident.getFullName(),request.getVnpOrderInfo());
         }
     }
 
@@ -430,19 +436,71 @@ public class FeeService {
         List<ServiceFee> serviceFees = serviceFeeRepository.dichVuChuaDong(resident.getApartment().getId());
         List<UtilityBill> utilityBills = utilityBillRepository.dichVuChuaDong(resident.getApartment().getId());
 
+        Double fee = 0D;
         for(VehicleFee v : vehicleFees){
             v.setPaidStatus(true);
             vehicleFeeRepository.save(v);
+            fee += v.getFee();
         }
         for(ServiceFee v : serviceFees){
             v.setPaidStatus(true);
             serviceFeeRepository.save(v);
+            fee += v.getFee();
         }
         for(UtilityBill v : utilityBills){
             v.setPaidStatus(true);
             utilityBillRepository.save(v);
+            fee += v.getFee();
         }
+        sendMail(resident.getApartment(), "Thanh toán phí còn lại", fee,resident.getFullName(),request.getVnpOrderInfo());
     }
 
 
+    public void sendMail(Apartment apartment, String titleAp, Double fee, String tenNguoiThanhToan, String maThanhToan){
+        String content = mailContent(tenNguoiThanhToan, maThanhToan, titleAp, fee);
+        for(Resident r : apartment.getResidents()){
+            mailService.sendEmail(r.getUser().getUsername(), "Thông báo thanh toán "+titleAp, content, false, true);
+        }
+    }
+
+    public String mailContent(String tenNguoiThanhToan, String maThanhToan, String tenDichVu, Double soTien){
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
+        String ngayHienTai = now.format(formatter);
+        Locale vietnamLocale = new Locale("vi", "VN"); // Định dạng theo Việt Nam
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(vietnamLocale);
+        String tien = currencyFormatter.format(soTien);
+        String content =
+                "<div style=\"font-family: Arial, sans-serif; line-height: 1.6; margin: 20px;\">\n" +
+                        "        <div style=\"max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px; padding: 20px;\">\n" +
+                        "            <h2 style=\"text-align: center; color: #333; border-bottom: 2px solid #f4f4f4; padding-bottom: 10px;\">\n" +
+                        "                Thanh Toán Hóa Đơn\n" +
+                        "            </h2>\n" +
+                        "            <div style=\"margin-bottom: 20px;\">\n" +
+                        "                <p><strong>Tên người thanh toán:</strong> "+tenNguoiThanhToan+"</p>\n" +
+                        "                <p><strong>Ngày thanh toán:</strong> "+ngayHienTai+"</p>\n" +
+                        "                <p><strong>Mã thanh toán:</strong> #"+maThanhToan+"</p>\n" +
+                        "            </div>\n" +
+                        "            <table style=\"width: 100%; border-collapse: collapse; margin-bottom: 20px;\">\n" +
+                        "                <thead>\n" +
+                        "                    <tr style=\"background-color: #f4f4f4; text-align: left;\">\n" +
+                        "                        <th style=\"border: 1px solid #ddd; padding: 8px;\">Tên dịch vụ</th>\n" +
+                        "                        <th style=\"border: 1px solid #ddd; padding: 8px;\">Số tiền</th>\n" +
+                        "                    </tr>\n" +
+                        "                </thead>\n" +
+                        "                <tbody>\n" +
+                        "                    <tr>\n" +
+                        "                        <td style=\"border: 1px solid #ddd; padding: 8px;\">"+tenDichVu+"</td>\n" +
+                        "                        <td style=\"border: 1px solid #ddd; padding: 8px; text-align: right;\">"+tien+"</td>\n" +
+                        "                    </tr>\n" +
+                        "                </tbody>\n" +
+                        "            </table>\n" +
+                        "            <div style=\"text-align: center; margin-top: 20px;\">\n" +
+                        "                <p>Cảm ơn bạn đã thanh toán!</p>\n" +
+                        "                <p>Nếu bạn có bất kỳ câu hỏi nào, hãy liên hệ với chúng tôi theo địa chỉ <a href=\"mailto:support@example.com\" style=\"color: #007BFF; text-decoration: none;\">support@example.com</a>.</p>\n" +
+                        "            </div>\n" +
+                        "        </div>\n" +
+                        "    </div>";
+        return content;
+    }
 }

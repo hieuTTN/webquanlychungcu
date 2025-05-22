@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import ReactPaginate from 'react-paginate';
-import { getMethod ,deleteMethod} from '../../services/request';
+import { getMethod ,deleteMethod, postMethod} from '../../services/request';
 import {toast } from 'react-toastify';
 import { Button, Card, Col, DatePicker, Input, Pagination, Row, Table } from "antd";
+import Swal from 'sweetalert2';
 
 var size = 10;
 var url = '';
@@ -44,6 +45,22 @@ const AdminReport = ()=>{
         setpageCount(result.totalPages)
     }
 
+    async function checkedReport(id) {
+        const response = await postMethod('/api/report/admin/checked?id='+id)
+        var result = await response.json();
+        if (response.status < 300) {
+            Swal.fire({
+                title: "Thông báo",
+                text: "Đã gửi phản hồi xử lý thành công!",
+                preConfirm: () => {
+                    window.location.reload();
+                }
+            });
+        } else {
+            toast.error("Thất bại");
+        }
+    }
+
     return (
         <>
             <div class="headerpageadmin d-flex justify-content-between align-items-center p-3 bg-light border">
@@ -73,6 +90,7 @@ const AdminReport = ()=>{
                                 <th>Ngày báo cáo</th>
                                 <th>Nội dung báo cáo</th>
                                 <th>Tài khoản</th>
+                                <th>Trạng thái</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -87,6 +105,12 @@ const AdminReport = ()=>{
                                     <td>
                                         Mã TK: <strong>{item.user.id}</strong><br/>
                                         Email: <strong>{item.email}</strong>
+                                    </td>
+                                    <td>
+                                        <label class="checkbox-custom cateparent"> Đã xử lý
+                                            <input checked={item.checked} onChange={()=>checkedReport(item.id)} type="checkbox"/>
+                                            <span class="checkmark-checkbox"></span>
+                                        </label>
                                     </td>
                                 </tr>
                             }))}

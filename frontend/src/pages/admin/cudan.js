@@ -67,7 +67,7 @@ const AdminCuDan = ()=>{
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>Ảnh</th>
+                                {/* <th>Ảnh</th> */}
                                 <th>Họ tên</th>
                                 <th>Số điện thoại</th>
                                 <th>Ngày sinh</th>
@@ -81,7 +81,7 @@ const AdminCuDan = ()=>{
                         <tbody>
                             {items.map((item=>{
                                     return  <tr>
-                                    <td><img src={item.image} className='imgtable'/></td>
+                                    {/* <td><img src={item.image} className='imgtable'/></td> */}
                                     <td>{item.fullName}</td>
                                     <td>{item.phone}</td>
                                     <td>{item.bod}</td>

@@ -110,7 +110,7 @@ function ThongTinCanHo(){
             <thead>
                 <tr>
                     <th>STT</th>
-                    <th>Ảnh</th>
+                    {/* <th>Ảnh</th> */}
                     <th>Họ tên</th>
                     <th>Email</th>
                     <th>Ngày sinh</th>
@@ -123,7 +123,7 @@ function ThongTinCanHo(){
                 {apartment?.residents.map((item, index)=>{
                     return <tr>
                         <td>{++index}</td>
-                        <td><img src={item.image} class="imgtable"/></td>
+                        {/* <td><img src={item.image} class="imgtable"/></td> */}
                         <td>{item.fullName}</td>
                         <td>{item.user.username}</td>
                         <td>{item.bod}</td>

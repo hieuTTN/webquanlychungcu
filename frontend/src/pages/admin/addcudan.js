@@ -8,9 +8,7 @@ import React, { useRef } from 'react';
 import Select from 'react-select';
 
 
-var linkbanner = '';
-
-
+// var linkbanner = '';
 const AdminAddCuDan = ()=>{
     const [item, setItem] = useState(null);
     const [apartments, setApartments] = useState([]);
@@ -24,7 +22,7 @@ const AdminAddCuDan = ()=>{
                 var result = await response.json();
                 setItem(result)
                 setApartment(result.apartment)
-                linkbanner = result.image
+                // linkbanner = result.image
                 document.getElementById("isHouseholdHead").checked = result.isHouseholdHead
             }
         };
@@ -45,10 +43,10 @@ const AdminAddCuDan = ()=>{
         var id = uls.searchParams.get("id");
         var userId = uls.searchParams.get("userId");
 
-        var ims = await uploadSingleFile(document.getElementById("imgbanner"))
-        if(ims != null){
-            linkbanner = ims
-        }
+        // var ims = await uploadSingleFile(document.getElementById("imgbanner"))
+        // if(ims != null){
+        //     linkbanner = ims
+        // }
 
         var payload = {
             "id": id,
@@ -56,7 +54,7 @@ const AdminAddCuDan = ()=>{
             "fullName": event.target.elements.fullName.value,
             "bod": event.target.elements.bod.value,
             "phone": event.target.elements.phone.value,
-            "image": linkbanner,
+            // "image": linkbanner,
             "cic": event.target.elements.cic.value,
             "isHouseholdHead": event.target.elements.isHouseholdHead.checked,
             "apartmentId": apartment.id,
@@ -125,9 +123,8 @@ const AdminAddCuDan = ()=>{
                                 <input defaultValue={item?.user.username} name="username" class="form-control"/>
                                 <label class="lb-form">Mật khẩu {item && <span>(Bỏ trống để sử dụng mật khẩu cũ)</span>}</label>
                                 <input name="password" class="form-control" id='password' type='password' placeholder='*****'/>
-                                <label class="lb-form">Ảnh cư dân</label>
-                                <input id="imgbanner" type="file" class="form-control"/>
-                                <img src={item == null ? '': item.image} className='imgtable'/>
+                                {/* <label class="lb-form">Ảnh cư dân</label>
+                                <input id="imgbanner" type="file" class="form-control"/> */}
                             </div>
                         </form>
                     </div>

@@ -49,4 +49,10 @@ public class ReportApi {
         reportService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping("/admin/checked")
+    public ResponseEntity<?> checked(@RequestParam Long id){
+        Report result = reportService.checked(id);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
+    }
 }

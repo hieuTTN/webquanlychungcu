@@ -2,6 +2,7 @@ package com.web.service;
 
 import com.web.entity.Report;
 import com.web.repository.ReportRepository;
+import com.web.utils.MailService;
 import com.web.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +31,9 @@ public class ReportService {
     @Autowired
     NotificationService notificationService;
 
+    @Autowired
+    MailService mailService;
+
     public Report save(Report report){
         report.setCreatedDate(new Timestamp(System.currentTimeMillis()));
         report.setUser(userUtils.getUserWithAuthority());
@@ -54,5 +58,14 @@ public class ReportService {
 
     public void delete(Long id) {
         reportRepository.deleteById(id);
+    }
+
+    public Report checked(Long id) {
+        Report report = reportRepository.findById(id).get();
+        report.setChecked(true);
+        reportRepository.save(report);
+        mailService.sendEmail(report.getUser().getUsername(), "Chúng tôi đã xử lý phản ảnh của bạn",
+                "Nội dung phản ánh<br>"+report.getContent()+"<br>Chúng tôi đã xử lý phản ánh của bạn",false, true);
+        return report;
     }
 }
