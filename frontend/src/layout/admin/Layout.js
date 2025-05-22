@@ -146,16 +146,13 @@ function Header({ children }){
                         </li>
                     </ul>
                 </li>
-                <li className={isActive(["/admin/history-pay", "/admin/deduction-history","/admin/thong-ke"])}>
+                <li className={isActive(["/admin/thongke"])}>
                     <a href="#dashboardSubmenu1" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white text-decoration-none">
                         <i class="fa-solid fa-chart-line fa-fw"></i> Thống kê
                     </a>
                     <ul class="collapse list-unstyleds" id="dashboardSubmenu1">
                         <li class="nav-item">
-                            <a href="history-pay" class="text-white text-decoration-none ps-4"><i class="fa fa-clock"></i> Lịch sử thanh toán</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="thong-ke" class="text-white text-decoration-none ps-4"><i class="fa fa-chart-line"></i> Thống kê</a>
+                            <a href="thongke" class="text-white text-decoration-none ps-4"><i class="fa fa-chart-line"></i> Thống kê</a>
                         </li>
                     </ul>
                 </li>

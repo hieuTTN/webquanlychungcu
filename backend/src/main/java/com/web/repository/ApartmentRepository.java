@@ -29,4 +29,10 @@ public interface ApartmentRepository extends JpaRepository<Apartment, Long> {
 
     @Query(value = "select a.name from resident r inner join apartment a on a.id = r.apartment_id where r.user_id = ?1", nativeQuery = true)
     String apartmentNameByUser(Long userId);
+
+    @Query(value = "SELECT count(a.id)\n" +
+            "FROM apartment a\n" +
+            "LEFT JOIN resident r ON a.id = r.apartment_id\n" +
+            "WHERE r.id IS NULL", nativeQuery = true)
+    Long soCanConTrong();
 }

@@ -14,6 +14,7 @@ import AdminReport from '../pages/admin/report'
 import AdminPhiGuiXe from '../pages/admin/phiguixe'
 import AdminDongPhi from '../pages/admin/dongphi'
 import AdminCapNhatDongPhi from '../pages/admin/capnhatdongphi'
+import AdminThongKe from '../pages/admin/thongke'
 
 //public
 import login from "../pages/public/login";
@@ -65,6 +66,7 @@ const adminRoutes = [
     { path: "/admin/phiguixe", component: AdminPhiGuiXe, layout: layoutAdmin },
     { path: "/admin/dongphi", component: AdminDongPhi, layout: layoutAdmin },
     { path: "/admin/capnhatdongphi", component: AdminCapNhatDongPhi, layout: layoutAdmin },
+    { path: "/admin/thongke", component: AdminThongKe, layout: layoutAdmin },
 ];
 
 

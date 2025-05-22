@@ -20,4 +20,6 @@ public interface ServiceFeeRepository extends JpaRepository<ServiceFee, Long> {
     @Query("select s from ServiceFee s where s.month = ?1 and s.year = ?2 and s.apartment.id = ?3")
     ServiceFee findByThangNamAndCanHo(Integer month, Integer year, Long canHoId);
 
+    @Query(value = "SELECT SUM(u.fee) FROM service_fee u WHERE u.month = ?1 AND u.year = ?2", nativeQuery = true)
+    Double tinhDoanhThu(Integer month, Integer year);
 }

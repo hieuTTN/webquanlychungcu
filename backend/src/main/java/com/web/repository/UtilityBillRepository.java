@@ -20,4 +20,7 @@ public interface UtilityBillRepository extends JpaRepository<UtilityBill, Long> 
     @Query("select s from UtilityBill s where s.month = ?1 and s.year = ?2 and s.apartment.id = ?3")
     UtilityBill findByThangNamAndCanHo(Integer month, Integer year, Long canHoId);
 
+    @Query(value = "SELECT SUM(u.fee) FROM utility_bill u WHERE u.month = ?1 AND u.year = ?2", nativeQuery = true)
+    Double tinhDoanhThu(Integer month, Integer year);
 }
+
