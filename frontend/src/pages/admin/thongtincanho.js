@@ -16,7 +16,7 @@ import * as React from 'react';
 
 
 
-function ThongTinChung(){
+function ThongTinCanHo(){
     const [vehicleFee, setVehicleFee] = React.useState([]);
     const [apartment, setApartment] = React.useState(null);
     const [numOto, setNumOto] = React.useState(0);
@@ -29,10 +29,12 @@ function ThongTinChung(){
     }, []);
 
     const getInfor= async() =>{
+        var uls = new URL(document.URL)
+        var id = uls.searchParams.get("id");
         var response = await getMethod('/api/VehicleServiceFee/all/findAll');
         var list = await response.json();
         setVehicleFee(list)
-        var response = await getMethod('/api/apartment/user/my');
+        var response = await getMethod('/api/apartment/all/findById?id='+id);
         var result = await response.json();
         setApartment(result)
         var oto = 0
@@ -135,12 +137,6 @@ function ThongTinChung(){
             </tbody>
         </table><br/>
         <h4>Thông tin phương tiện</h4>
-        <a href="/user/dangkyphuongtien" class="btn btn-primary">Đăng ký thêm phương tiện</a>
-        <span class="luuythongtin">Lưu ý (Mỗi hộ dân chỉ được đăng ký 1 xe ô tô), 
-            {vehicleFee.map((item, index)=>{
-                return <span>Phí gửi {item.name}: <span class="price"></span> {formatMoney(item.fee)} /tháng, </span>
-            })}
-        </span>
         <br/><br/><br/>
         <table class="table" id="examples">
             <thead>
@@ -150,7 +146,6 @@ function ThongTinChung(){
                 <th>Ngày cập nhật</th>
                 <th>Biển số xe</th>
                 <th>Loại phương tiện</th>
-                <th>Xóa</th>
             </tr>
             </thead>
             <tbody>
@@ -165,10 +160,6 @@ function ThongTinChung(){
                             {item.vehicleType == 1 && <span><i class="fa fa-motorcycle"></i> Xe máy</span>}
                             {item.vehicleType == 0 && <span><i class="fa fa-bicycle"></i> Xe đạp</span>}
                         </td>
-                        <td>
-                            <a class="delete-btn"><i class="fa fa-trash" ></i></a>
-                            <a href={'/user/dangkyphuongtien?id='+item.id} class="edit-btn"><i class="fa fa-edit" ></i></a>
-                        </td>
                     </tr>
                 })}
             </tbody>
@@ -177,4 +168,4 @@ function ThongTinChung(){
     );
 }
   
-export default ThongTinChung;
+export default ThongTinCanHo;

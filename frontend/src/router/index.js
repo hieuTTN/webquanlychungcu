@@ -9,6 +9,11 @@ import AdminCanHo from '../pages/admin/canho'
 import AdminAddCanHo from '../pages/admin/addcanho'
 import AdminCuDan from '../pages/admin/cudan'
 import AdminAddCuDan from '../pages/admin/addcudan'
+import ThongTinCanHo from '../pages/admin/thongtincanho'
+import AdminReport from '../pages/admin/report'
+import AdminPhiGuiXe from '../pages/admin/phiguixe'
+import AdminDongPhi from '../pages/admin/dongphi'
+import AdminCapNhatDongPhi from '../pages/admin/capnhatdongphi'
 
 //public
 import login from "../pages/public/login";
@@ -45,6 +50,11 @@ const adminRoutes = [
     { path: "/admin/add-canho", component: AdminAddCanHo, layout: layoutAdmin },
     { path: "/admin/cudan", component: AdminCuDan, layout: layoutAdmin },
     { path: "/admin/add-cudan", component: AdminAddCuDan, layout: layoutAdmin },
+    { path: "/admin/thongtincanho", component: ThongTinCanHo, layout: layoutAdmin },
+    { path: "/admin/report", component: AdminReport, layout: layoutAdmin },
+    { path: "/admin/phiguixe", component: AdminPhiGuiXe, layout: layoutAdmin },
+    { path: "/admin/dongphi", component: AdminDongPhi, layout: layoutAdmin },
+    { path: "/admin/capnhatdongphi", component: AdminCapNhatDongPhi, layout: layoutAdmin },
 ];
 
 

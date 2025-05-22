@@ -16,4 +16,8 @@ public class VehicleServiceFeeService {
     public List<VehicleServiceFee> findAll(){
         return vehicleServiceFeeRepository.findAll();
     }
+
+    public VehicleServiceFee update(VehicleServiceFee vehicleServiceFee) {
+        return vehicleServiceFeeRepository.save(vehicleServiceFee);
+    }
 }

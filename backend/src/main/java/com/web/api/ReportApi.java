@@ -38,7 +38,8 @@ public class ReportApi {
     }
 
     @GetMapping("/admin/all")
-    public Page<Report> allReport(Pageable pageable, @RequestParam(required = false) Date start, @RequestParam(required = false) Date end){
+    public Page<Report> allReport(Pageable pageable, @RequestParam(required = false) Date start,
+                                  @RequestParam(required = false) Date end){
         Page<Report> result = reportService.findAll(pageable, start, end);
         return result;
     }

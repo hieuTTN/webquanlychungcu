@@ -89,7 +89,7 @@ function Header({ children }){
                         </li>
                     </ul>
                 </li>
-                <li className={isActive(["/admin/canho", "/admin/add-canho"])}>
+                <li className={isActive(["/admin/canho", "/admin/add-canho","/admin/thongtincanho"])}>
                     <a href="#specialty" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white text-decoration-none">
                         <i class="fa fa-home fa-fw"></i> Quản lý căn hộ
                     </a>
@@ -128,18 +128,21 @@ function Header({ children }){
                         </li>
                     </ul>
                 </li>
-                <li className={isActive(["/admin/category"])}>
-                    <a href="category" class="text-white text-decoration-none">
+                <li className={isActive(["/admin/report"])}>
+                    <a href="report" class="text-white text-decoration-none">
                         <i class="fa fa-list fa-fw"></i> Quản lý phản ánh
                     </a>
                 </li>
-                <li className={isActive(["/admin/service", "/admin/add-service"])}>
+                <li className={isActive(["/admin/phiguixe", "/admin/dongphi"])}>
                     <a href="#dichvukham" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white text-decoration-none">
                         <i class="fa fa-money fa-fw"></i> Quản lý đóng phí
                     </a>
                     <ul class="collapse list-unstyleds" id="dichvukham">
                         <li class="nav-item">
-                            <a href="service" class="text-white text-decoration-none ps-4"><i class="fa fa-list"></i> Danh sách đóng phí</a>
+                            <a href="dongphi" class="text-white text-decoration-none ps-4"><i class="fa fa-list"></i> Danh sách đóng phí</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="phiguixe" class="text-white text-decoration-none ps-4"><i class="fa fa-car"></i> Phí gửi xe</a>
                         </li>
                     </ul>
                 </li>

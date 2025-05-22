@@ -89,6 +89,7 @@ const AdminCanHo = ()=>{
                                     <td class="sticky-col">
                                         <a href={"add-canho?id="+item.id} class="edit-btn"><i className='fa fa-edit'></i></a>
                                         <button onClick={()=>deleteData(item.id)} class="delete-btn"><i className='fa fa-trash'></i></button>
+                                        <a href={"thongtincanho?id="+item.id} class="edit-btn" title='Thông tin căn hộ'><i className='fa fa-eye'></i></a>
                                     </td>
                                 </tr>
                             }))}
