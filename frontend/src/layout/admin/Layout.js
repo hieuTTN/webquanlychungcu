@@ -89,6 +89,32 @@ function Header({ children }){
                         </li>
                     </ul>
                 </li>
+                <li className={isActive(["/admin/canho", "/admin/add-canho"])}>
+                    <a href="#specialty" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white text-decoration-none">
+                        <i class="fa fa-home fa-fw"></i> Quản lý căn hộ
+                    </a>
+                    <ul class="collapse list-unstyleds" id="specialty">
+                        <li class="nav-item">
+                            <a href="canho" class="text-white text-decoration-none ps-4"><i class="fa fa-list"></i> Danh sách căn hộ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="add-canho" class="text-white text-decoration-none ps-4"><i class="fa fa-plus"></i> Thêm căn hộ</a>
+                        </li>
+                    </ul>
+                </li>
+                 <li className={isActive(["/admin/cudan", "/admin/add-cudan"])}>
+                    <a href="#dashboardSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white text-decoration-none">
+                        <i class="fa fa-users fa-fw"></i> Quản lý cư dân
+                    </a>
+                    <ul class="collapse list-unstyleds" id="dashboardSubmenu">
+                        <li class="nav-item">
+                            <a href="cudan" class="text-white text-decoration-none ps-4"><i class="fa fa-list"></i> Danh sách cư dân</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="add-cudan" class="text-white text-decoration-none ps-4"><i class="fa fa-plus"></i> Thêm cư dân</a>
+                        </li>
+                    </ul>
+                </li>
                 <li className={isActive(["/admin/blog", "/admin/add-blog"])}>
                     <a href="#colbaiviet" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white text-decoration-none">
                         <i class="fa fa-bell fa-fw"></i> Thông báo
@@ -106,32 +132,6 @@ function Header({ children }){
                     <a href="category" class="text-white text-decoration-none">
                         <i class="fa fa-list fa-fw"></i> Quản lý phản ánh
                     </a>
-                </li>
-                <li className={isActive(["/admin/center", "/admin/add-center"])}>
-                    <a href="#dashboardSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white text-decoration-none">
-                        <i class="fa fa-users fa-fw"></i> Quản lý cư dân
-                    </a>
-                    <ul class="collapse list-unstyleds" id="dashboardSubmenu">
-                        <li class="nav-item">
-                            <a href="center" class="text-white text-decoration-none ps-4"><i class="fa fa-list"></i> Danh sách cư dân</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="add-center" class="text-white text-decoration-none ps-4"><i class="fa fa-plus"></i> Thêm cư dân</a>
-                        </li>
-                    </ul>
-                </li>
-                <li className={isActive(["/admin/canho", "/admin/add-canho"])}>
-                    <a href="#specialty" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white text-decoration-none">
-                        <i class="fa fa-home fa-fw"></i> Quản lý căn hộ
-                    </a>
-                    <ul class="collapse list-unstyleds" id="specialty">
-                        <li class="nav-item">
-                            <a href="canho" class="text-white text-decoration-none ps-4"><i class="fa fa-list"></i> Danh sách căn hộ</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="add-canho" class="text-white text-decoration-none ps-4"><i class="fa fa-plus"></i> Thêm căn hộ</a>
-                        </li>
-                    </ul>
                 </li>
                 <li className={isActive(["/admin/service", "/admin/add-service"])}>
                     <a href="#dichvukham" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white text-decoration-none">

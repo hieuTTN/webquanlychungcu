@@ -25,4 +25,8 @@ public interface ResidentRepository extends JpaRepository<Resident, Long> {
 
     @Query("select r from Resident r where r.fullName like ?1 or r.phone like ?1 or r.user.username like ?1")
     Page<Resident> findAllByParam(String search, Pageable pageable);
+
+    @Query("select r from Resident r where (r.fullName like ?1 or r.phone like ?1 or r.user.username like ?1) and r.apartment.id = ?2")
+    Page<Resident> findAllByParamAndApartment(String search, Long apartmentId, Pageable pageable);
+
 }

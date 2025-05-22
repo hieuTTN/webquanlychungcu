@@ -32,8 +32,8 @@ public class ReportApi {
     }
 
     @GetMapping("/user/my-report")
-    public List<Report> findByBds(){
-        List<Report> list = reportService.findByUser();
+    public Page<Report> findByBds(Pageable pageable){
+        Page<Report> list = reportService.findByUser(pageable);
         return list;
     }
 
@@ -41,5 +41,11 @@ public class ReportApi {
     public Page<Report> allReport(Pageable pageable, @RequestParam(required = false) Date start, @RequestParam(required = false) Date end){
         Page<Report> result = reportService.findAll(pageable, start, end);
         return result;
+    }
+
+    @DeleteMapping("/all/delete")
+    public ResponseEntity<?> delete(@RequestParam("id") Long id){
+        reportService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

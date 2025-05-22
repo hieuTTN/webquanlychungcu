@@ -16,7 +16,7 @@ import java.util.List;
 public interface ReportRepository extends JpaRepository<Report,Long> {
 
     @Query("select r from Report r where r.user.id = ?1")
-    public List<Report> findByUser(Long UserId);
+    public Page<Report> findByUser(Long UserId,Pageable pageable);
 
     @Query(value = "select * from report r where date(r.created_date) >= ?1 and date(r.created_date) <= ?2", nativeQuery = true)
     public Page<Report> findByDate(Date start, Date end, Pageable pageable);

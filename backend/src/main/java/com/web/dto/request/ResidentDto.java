@@ -30,5 +30,4 @@ public class ResidentDto {
     private Long userId;
     private String username;
     private String password;
-    private String avatar;
 }

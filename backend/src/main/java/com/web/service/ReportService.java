@@ -37,8 +37,8 @@ public class ReportService {
         return report;
     }
 
-    public List<Report> findByUser(){
-        return reportRepository.findByUser(userUtils.getUserWithAuthority().getId());
+    public Page<Report> findByUser(Pageable pageable){
+        return reportRepository.findByUser(userUtils.getUserWithAuthority().getId(),pageable);
     }
 
     public Page<Report> findAll(Pageable pageable, Date start, Date end){
@@ -52,4 +52,7 @@ public class ReportService {
         return page;
     }
 
+    public void delete(Long id) {
+        reportRepository.deleteById(id);
+    }
 }

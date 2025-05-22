@@ -1,6 +1,6 @@
 import { ToastContainer, toast } from 'react-toastify';
 import {Routes, Route,BrowserRouter as Router} from 'react-router-dom'
-import DefaultLayout from './layout/user/defaultLayout/defaultLayout'
+import DefaultLayout from './layout/user/Layout'
 import { publicRoutes, adminRoutes, userRoutes } from './router/index';
 import AdminLayout from './layout/admin/Layout'
 import "./App.css"

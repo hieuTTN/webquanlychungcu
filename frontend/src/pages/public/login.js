@@ -43,7 +43,7 @@ async function processLogin(user, token) {
         window.location.href = 'admin/user';
     }
     if (user.authorities.name === "ROLE_USER") {
-        window.location.href = '/index';
+        window.location.href = '/user/thongtinchung';
     }
 }
 

@@ -33,6 +33,7 @@ public class Apartment {
     private List<Resident> residents;
 
     @OneToMany(mappedBy = "apartment", cascade = CascadeType.REMOVE)
+    @JsonIgnoreProperties(value = {"apartment"})
     private List<Vehicle> vehicles;
 
     @Override

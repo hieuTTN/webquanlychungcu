@@ -7,6 +7,8 @@ import AdminBlog from '../pages/admin/blog'
 import AdminAddBlog from '../pages/admin/addblog'
 import AdminCanHo from '../pages/admin/canho'
 import AdminAddCanHo from '../pages/admin/addcanho'
+import AdminCuDan from '../pages/admin/cudan'
+import AdminAddCuDan from '../pages/admin/addcudan'
 
 //public
 import login from "../pages/public/login";
@@ -14,7 +16,10 @@ import forgotPage from '../pages/public/forgot'
 import datLaiMatKhauPage from '../pages/public/datlaimatkhau'
 
 //user
-import taikhoan from "../pages/user/taikhoan";
+import ThongTinChung from "../pages/user/thongtinchung";
+import DangKyPhuongTien from "../pages/user/dangkyphuongtien";
+import UserBlog from "../pages/user/blog";
+import UserReport from "../pages/user/report";
 
 
 const publicRoutes = [
@@ -25,7 +30,10 @@ const publicRoutes = [
 ];
 
 const userRoutes = [
-    {path: "/tai-khoan", component: taikhoan},
+    {path: "/user/thongtinchung", component: ThongTinChung},
+    {path: "/user/dangkyphuongtien", component: DangKyPhuongTien},
+    {path: "/user/blog", component: UserBlog},
+    {path: "/user/report", component: UserReport},
 ];
 
 
@@ -35,6 +43,8 @@ const adminRoutes = [
     { path: "/admin/add-blog", component: AdminAddBlog, layout: layoutAdmin },
     { path: "/admin/canho", component: AdminCanHo, layout: layoutAdmin },
     { path: "/admin/add-canho", component: AdminAddCanHo, layout: layoutAdmin },
+    { path: "/admin/cudan", component: AdminCuDan, layout: layoutAdmin },
+    { path: "/admin/add-cudan", component: AdminAddCuDan, layout: layoutAdmin },
 ];
 
 

@@ -34,8 +34,9 @@ public class ResidentApi {
     }
 
     @GetMapping("/admin/findAll")
-    public ResponseEntity<?> findAll(@RequestParam(required = false) String search, Pageable pageable){
-        Page<Resident> result = residentService.findAllPage(search,pageable);
+    public ResponseEntity<?> findAll(@RequestParam(required = false) String search,
+            @RequestParam(required = false) Long apartmentId, Pageable pageable){
+        Page<Resident> result = residentService.findAllPage(search,apartmentId,pageable);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 

@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.List;
 
 @Service
@@ -25,6 +26,17 @@ public class VehicleService {
     private ResidentRepository residentRepository;
 
     public Vehicle save(Vehicle vehicle){
+        User user = userUtils.getUserWithAuthority();
+        Resident resident = residentRepository.findByUserName(user.getUsername());
+        vehicle.setApartment(resident.getApartment());
+        if(vehicle.getId() == null){
+            vehicle.setCreatedDate(new Date(System.currentTimeMillis()));
+        }
+        else{
+            Vehicle ex = vehicleRepository.findById(vehicle.getId()).get();
+            vehicle.setCreatedDate(ex.getCreatedDate());
+            vehicle.setUpdateDate(new Date(System.currentTimeMillis()));
+        }
         vehicleRepository.save(vehicle);
         return vehicle;
     }

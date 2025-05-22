@@ -26,4 +26,7 @@ public interface ApartmentRepository extends JpaRepository<Apartment, Long> {
 
     @Query("select a from Apartment a where (?1 is null or a.floor = ?1)")
     Page<Apartment> findByFloor(Integer floor, Pageable pageable);
+
+    @Query(value = "select a.name from resident r inner join apartment a on a.id = r.apartment_id where r.user_id = ?1", nativeQuery = true)
+    String apartmentNameByUser(Long userId);
 }

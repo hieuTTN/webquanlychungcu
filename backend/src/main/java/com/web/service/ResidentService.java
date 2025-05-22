@@ -97,16 +97,26 @@ public class ResidentService {
         return dto;
     }
 
-    public Page<Resident> findAllPage(String search,Pageable pageable){
+    public Page<Resident> findAllPage(String search,Long apartmentId,Pageable pageable){
         if(search == null){
             search = "";
         }
         search ="%"+search+"%";
+        if(apartmentId != null){
+            return residentRepository.findAllByParamAndApartment(search, apartmentId,pageable);
+        }
         return residentRepository.findAllByParam(search,pageable);
     }
 
     public void delete(Long id){
-        residentRepository.deleteById(id);
+        try {
+            Resident r = residentRepository.findById(id).get();
+            residentRepository.deleteById(id);
+            userRepository.deleteById(r.getUser().getId());
+        }
+        catch (Exception e){
+            throw new MessageException("Đã có nhiều liên kết, không thể xóa");
+        }
     }
 
     public Resident findById(Long id){

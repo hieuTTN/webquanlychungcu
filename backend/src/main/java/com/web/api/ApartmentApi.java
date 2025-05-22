@@ -1,7 +1,9 @@
 package com.web.api;
 
 import com.web.entity.Apartment;
+import com.web.repository.ApartmentRepository;
 import com.web.service.ApartmentService;
+import com.web.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +20,12 @@ public class ApartmentApi {
 
     @Autowired
     private ApartmentService apartmentService;
+
+    @Autowired
+    private ApartmentRepository apartmentRepository;
+
+    @Autowired
+    private UserUtils userUtils;
 
 
     @PostMapping("/admin/create")
@@ -38,6 +46,12 @@ public class ApartmentApi {
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
+    @GetMapping("/admin/findAll-list")
+    public ResponseEntity<?> findAll(){
+        List<Apartment> result = apartmentRepository.findAll();
+        return new ResponseEntity<>(result,HttpStatus.OK);
+    }
+
     @GetMapping("/admin/allTang")
     public ResponseEntity<?> allTang(){
         List<Integer> result = apartmentService.allTang();
@@ -53,6 +67,12 @@ public class ApartmentApi {
     @GetMapping("/user/my")
     public ResponseEntity<?> myApp(){
         Apartment result = apartmentService.myApp();
+        return new ResponseEntity<>(result,HttpStatus.OK);
+    }
+
+    @GetMapping("/user/apartment-name")
+    public ResponseEntity<?> AppName(){
+        String result = apartmentRepository.apartmentNameByUser(userUtils.getUserWithAuthority().getId());
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
